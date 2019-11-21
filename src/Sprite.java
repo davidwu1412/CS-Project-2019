@@ -17,18 +17,33 @@ public class Sprite{
 	private BufferedImage image;
 	public Sprite(int x, int y, String image) {
 		try {
-			this.image = ImageIO.read(new File(image));
+			if(!image.equalsIgnoreCase("none")) {
+				this.image = ImageIO.read(new File(image));
+				this.x = x;
+				this.y = y;
+				this.h = this.image.getHeight();
+				this.w = this.image.getWidth();
+				pixels = new int[w*h];
+				this.image.getRGB(0, 0, w, h, pixels, 0, w);
+			}
 		} catch (IOException e) {
 			System.out.println("Sprite missing, fatal error, exiting");
 			System.exit(0);
 		}
-		this.x = x;
-		this.y = y;
-		this.h = this.image.getHeight();
-		this.w = this.image.getWidth();
-		pixels = new int[w*h];
-		System.out.println(x);
-		this.image.getRGB(0, 0, w, h, pixels, 0, w);
+	}
+	public Sprite(String image) {
+		try {
+			if(!image.equalsIgnoreCase("none")) {
+				this.image = ImageIO.read(new File(image));
+				this.h = this.image.getHeight();
+				this.w = this.image.getWidth();
+				pixels = new int[w*h];
+				this.image.getRGB(0, 0, w, h, pixels, 0, w);
+			}
+		} catch (IOException e) {
+			System.out.println("Sprite missing, fatal error, exiting");
+			System.exit(0);
+		}
 	}
 	public int[] draw(int[] pixels, Dimension screen) {
 		int width = 0;

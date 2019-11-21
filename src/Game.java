@@ -11,17 +11,34 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 @SuppressWarnings({"unused"})
-public class Game extends JFrame implements MouseListener, Runnable{
+public class Game extends JFrame implements MouseListener, Runnable {
 	public final Dimension screenSize;
 	private static final long serialVersionUID = 1L;
-	private static ArrayList<MinerObject> miners = new ArrayList<MinerObject>();
-	private static ArrayList<Upgrade> upgrades = new ArrayList<Upgrade>();
+	private ArrayList<Device> devices;
+	private int currentDevice = -1;
 	private boolean running = false;
 	private Thread thread;
 	private BufferedImage image;
 	private int[] pixels;
 	private Sprite s;
 	public Game() {
+		devices = new ArrayList<Device>();
+		devices.add(new Device("Arduino Nano", "It somehow works, it just does, don't question it.", "none"));
+		devices.add(new Device("Arduino", "Only slightly better, at least it's larger.", "none"));
+		devices.add(new Device("Arduino Mega", "Much larger, still not much better.", "none"));
+		devices.add(new Device("Casual Laptop", "Finally, something real although sketchy.", "none"));
+		devices.add(new Device("Business Laptop", "Wow! Actually capable of getting some BTC.", "none"));
+		devices.add(new Device("Gaming Laptop", "A beast for it's size.", "none"));
+		devices.add(new Device("Mini Desktop", "Marginally better than a laptop.", "none"));
+		devices.add(new Device("Slightly Larger Desktop", "A little better.", "none"));
+		devices.add(new Device("PC Desktop", "Wow! Can actually run Windows 10.", "none"));
+		devices.add(new Device("High-End Desktop", "Wow! Can actually run Minecraft.", "none"));
+		devices.add(new Device("Gaming Desktop", "Amazing top of the line performance.", "none"));
+		devices.add(new Device("Mom's Basement", "First server bois.", "none"));
+		devices.add(new Device("Ubisoft Server", "Practically non-existent", "none"));
+		devices.add(new Device("Server Farm", "Finally, you've reached the end-game", "none"));
+		readSaveFile();
+		currentDevice = 0;
 		screenSize = new Dimension(500,500);
 		setSize((int)screenSize.getWidth(),(int)screenSize.getHeight());
 		setResizable(false);
@@ -82,19 +99,22 @@ public class Game extends JFrame implements MouseListener, Runnable{
 			pixels[i] = Color.WHITE.getRGB();
 		}
 	}
-	public void mouseClicked(MouseEvent arg0) {
-		System.out.println(arg0);
-	}
-	public void mouseEntered(MouseEvent arg0) {
+	public void readSaveFile() {
 		
 	}
-	public void mouseExited(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent e) {
 		
 	}
-	public void mousePressed(MouseEvent arg0) {
+	public void mouseEntered(MouseEvent e) {
 		
 	}
-	public void mouseReleased(MouseEvent arg0) {
+	public void mouseExited(MouseEvent e) {
+		
+	}
+	public void mousePressed(MouseEvent e) {
+		
+	}
+	public void mouseReleased(MouseEvent e) {
 		
 	}
 	public static void main(String[] args) {
