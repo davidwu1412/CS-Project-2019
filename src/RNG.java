@@ -1,13 +1,45 @@
+import java.util.concurrent.Semaphore;
 
-public class RNG {
-	public RNG() {
+public class RNG implements Runnable {
+	public boolean running = false;
+	private Semaphore sem;
+	private long timeCounter;
+	private long timerStartTime;
+	public RNG(Semaphore s) {
+		sem = s;
+		timeCounter = 0;
+		timerStartTime = 0;
 	}
-	public static boolean generateNumber(int chance) {
+	public static boolean generateNumber(double chance) {
 		double output = Math.random();
-		if(output >= (double)chance/100.0) {
+		if(output <= chance/100.0) {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	public void run() {
+		timerStartTime = System.currentTimeMillis();
+		while(running) {
+			try {
+				timeCounter = System.currentTimeMillis()-timerStartTime;
+				if(timeCounter >= Player.period*1000) {
+					sem.acquire();
+					boolean temp = generateNumber(Player.chance);
+					if(temp) {
+						System.out.println("success");
+						
+						Game.player.giveBTC(temp);
+					}
+					sem.release();
+					timerStartTime = System.currentTimeMillis();
+				} else {
+					Thread.sleep(50);
+				}
+			} catch(InterruptedException e) {
+				System.out.println("Error 6: RNG Thread unable to sleep");
+				System.exit(0);
+			}
 		}
 	}
 }
