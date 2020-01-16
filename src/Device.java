@@ -8,6 +8,7 @@ public class Device {
 	protected ArrayList<Upgrade> availableUpgrades;
 	protected LinkedList<Upgrade> currentUpgrades;
 	protected JLabel image;
+	protected JLabel image2;
 	protected String flavourText = "";
 	protected double priceWeighting;
 	protected int price;
@@ -17,7 +18,9 @@ public class Device {
 	private int tier;
 	public Device(String name, String flavourText, String image, int price, int tier, double chance, double period, double value) {
 		this.image = new JLabel(new ImageIcon(image));
-		this.image.setBounds(100,100,300,300);
+		this.image2 = new JLabel(new ImageIcon(image));
+		this.image.setBounds(50,50,300,300);
+		this.image2.setBounds(400,50,300,300);
 		this.name = name;
 		availableUpgrades = new ArrayList<Upgrade>();
 		currentUpgrades = new LinkedList<Upgrade>();

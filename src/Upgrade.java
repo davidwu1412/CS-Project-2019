@@ -151,7 +151,7 @@ public class Upgrade {
 				System.exit(0);
 			}
 		} else if(effect[0].equalsIgnoreCase("value")) {
-			if(effect[1].equalsIgnoreCase("muliply")) {
+			if(effect[1].equalsIgnoreCase("multiply")) {
 				Player.value *= 1+(Double.parseDouble(effect[2])/100.0);
 			} else if(effect[1].equalsIgnoreCase("add")) {
 				Player.value += Double.parseDouble(effect[2]);

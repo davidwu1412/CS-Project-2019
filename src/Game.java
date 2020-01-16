@@ -29,7 +29,7 @@ public class Game {
 	public statTracker tracker = new statTracker(sem);
 	public RNG rng = new RNG(sem);
 	private JLabel title, instructions, credits, statTitleLabel, deviceLabel, chanceLabel, periodLabel, valueLabel, GPULabel, CPULabel, RAMLabel, btcIcon, usdIcon, btcLabel, usdLabel, noMoreDevices;
-	private JButton backToMainButton, tutorialButton, tutorialBackButton, statsButton, gameMenuButton, statBackButton, exitButton, convertUSD, convertBTC, upgradeMarketButton, currencyMarketButton, blackMarketButton, deviceMarketButton, buyDeviceButton;
+	private JButton backToMainButton, tutorialButton, tutorialBackButton, resetDataButton, statsButton, gameMenuButton, statBackButton, exitButton, convertUSD, convertBTC, upgradeMarketButton, currencyMarketButton, blackMarketButton, deviceMarketButton, buyDeviceButton;
 	public JFrame frame = new JFrame();
 	private JPanel mainMenu,gameMenu,tutorialPanel, statsPanel;
 
@@ -37,19 +37,19 @@ public class Game {
 
 		mainMenu = new JPanel();
 		mainMenu.setLayout(null);
-		mainMenu.setSize(700,700);
+		mainMenu.setSize(1000,700);
 
 		gameMenu = new JPanel();
 		gameMenu.setLayout(null);
-		gameMenu.setSize(700,700);
+		gameMenu.setSize(1000,700);
 
 		tutorialPanel = new JPanel();
 		tutorialPanel.setLayout(null);
-		tutorialPanel.setSize(700,700);
+		tutorialPanel.setSize(1000,700);
 
 		statsPanel = new JPanel();
 		statsPanel.setLayout(null);
-		statsPanel.setSize(700,700);
+		statsPanel.setSize(1000,700);
 
 		devices = new ArrayList<Device>();
 		devices.add(new Device("Arduino Nano", "It somehow works, it just does, don't question it.", "resources/Nano.png", 0, 0, 0, 0, 0));
@@ -66,11 +66,11 @@ public class Game {
 		Collections.sort(devices, new deviceByTier());
 		Upgrade.setDefaultPrices();
 		player = new Player();
-		screenSize = new Dimension(700,700);
+		screenSize = new Dimension(1000,700);
 
 		tutorialButton = new JButton("How To Play");				//Done
 		tutorialButton.setBackground(Color.gray);
-		tutorialButton.setBounds(275,400,150,50);
+		tutorialButton.setBounds(425,400,150,50);
 		tutorialButton.setActionCommand("tutorial");
 		tutorialButton.addActionListener(new ButtonActions());
 
@@ -88,7 +88,7 @@ public class Game {
 
 		gameMenuButton = new JButton("Play");						//Done
 		gameMenuButton.setBackground (Color.gray);
-		gameMenuButton.setBounds(275,300,150,50);
+		gameMenuButton.setBounds(425,300,150,50);
 		gameMenuButton.setActionCommand("playGame");
 		gameMenuButton.addActionListener(new ButtonActions());
 
@@ -103,53 +103,61 @@ public class Game {
 		tutorialBackButton.setBounds(50,570,100,50);
 		tutorialBackButton.setActionCommand("toMain");
 		tutorialBackButton.addActionListener(new ButtonActions());
+		
+		resetDataButton =  new JButton("Reset Data");
+		resetDataButton.setBackground (Color.gray);
+		resetDataButton.setBounds (425,500,150,50);
+		resetDataButton.setActionCommand("reset");
+		resetDataButton.addActionListener(new ButtonActions());
+		
 
 		exitButton = new JButton("Exit");							//Done
 		exitButton.setBackground (Color.gray);
-		exitButton.setBounds(275,500,150,50);
+		exitButton.setBounds(775,550,150,50);
 		exitButton.setActionCommand("quit");
 		exitButton.addActionListener(new ButtonActions());
 
 		convertUSD = new JButton("Convert USD to BTC");				//
 		convertUSD.setBackground(Color.gray);
-		convertUSD.setBounds(300,300,100,50);
+		convertUSD.setBounds(500,300,100,50);
 		convertUSD.setActionCommand("usdToBTC");
 		convertUSD.addActionListener(new MarketButtons());
 		convertUSD.setVisible(false);
 
 		convertBTC = new JButton("Convert BTC to USD");				//
 		convertBTC.setBackground(Color.gray);
-		convertBTC.setBounds(300,400,100,50);
+		convertBTC.setBounds(500,400,100,50);
 		convertBTC.setActionCommand("btcToUSD");
 		convertBTC.addActionListener(new MarketButtons());
 		convertBTC.setVisible(false);
 
 		upgradeMarketButton = new JButton("Upgrades");
 		upgradeMarketButton.setBackground(Color.gray);
-		upgradeMarketButton.setBounds(200,400,100,50);
+		upgradeMarketButton.setBounds(400,400,100,50);
 		upgradeMarketButton.setActionCommand("upgradeMarket");
 		upgradeMarketButton.addActionListener(new MarketButtons());
 		
 		currencyMarketButton = new JButton("Currency");
 		currencyMarketButton.setBackground(Color.gray);
-		currencyMarketButton.setBounds(200,330,100,50);
+		currencyMarketButton.setBounds(400,330,100,50);
 		currencyMarketButton.setActionCommand("currencyMarket");
 		currencyMarketButton.addActionListener(new MarketButtons());
 
 		deviceMarketButton = new JButton("Devices");
 		deviceMarketButton.setBackground(Color.gray);
-		deviceMarketButton.setBounds(200,260,100,50);
+		deviceMarketButton.setBounds(400,260,100,50);
 		deviceMarketButton.setActionCommand("deviceMarket");
 		deviceMarketButton.addActionListener(new MarketButtons());
 
 		blackMarketButton = new JButton("");
 		blackMarketButton.setBackground(Color.gray);
-		blackMarketButton.setBounds(200,190,100,50);
+		blackMarketButton.setBounds(400,190,100,50);
 		blackMarketButton.setActionCommand("blackMarket");
 		blackMarketButton.addActionListener(new MarketButtons());
 
 		buyDeviceButton = new JButton("Buy Next Device");
-		buyDeviceButton.setBounds(350,300,100,50);
+		buyDeviceButton.setBackground(Color.gray);
+		buyDeviceButton.setBounds(550,300,100,50);
 		buyDeviceButton.setActionCommand("nextDevice");
 		buyDeviceButton.addActionListener(new MarketButtons());
 		buyDeviceButton.setVisible(false);
@@ -171,7 +179,7 @@ public class Game {
 		usdLabel.setBackground(Color.lightGray);
 
 		title = new JLabel("Bitcoin Tycoon", SwingConstants.CENTER);
-		title.setBounds(0,75,700,200);
+		title.setBounds(0,75,1000,200);
 		title.setFont(new Font("Serif", Font.PLAIN, 48));
 
 		noMoreDevices = new JLabel("<html>No More Devices to Buy</html>", SwingConstants.CENTER);
@@ -223,11 +231,14 @@ public class Game {
 		mainMenu.add(gameMenuButton);
 		mainMenu.add(exitButton);
 		mainMenu.add(tutorialButton);
+		mainMenu.add(resetDataButton);
 
 		gameMenu.add(backToMainButton);
 		for(Device i : devices) {
 			i.image.setVisible(false);
+			i.image2.setVisible(false);
 			gameMenu.add(i.image);
+			gameMenu.add(i.image2);
 		}
 		gameMenu.add(statsButton);
 		gameMenu.add(convertUSD);
@@ -249,6 +260,7 @@ public class Game {
 
 		statsPanel.add(statTitleLabel);
 		statsPanel.add(statBackButton);
+		statsPanel.add(deviceLabel);
 		statsPanel.add(chanceLabel);
 		statsPanel.add(periodLabel);
 		statsPanel.add(valueLabel);
@@ -308,11 +320,11 @@ public class Game {
 		}
 		btcIcon.setVisible(false);
 		usdIcon.setVisible(false);
-		if(player.getDevice().getTier()+1 > devices.size()) {
+		if(player.getDevice().getTier()+1 >= devices.size()) {
 			noMoreDevices.setVisible(false);
 			buyDeviceButton.setVisible(false);
 		} else {
-			devices.get(devices.indexOf(player.getDevice())+1).image.setVisible(false);
+			devices.get(devices.indexOf(player.getDevice())+1).image2.setVisible(false);
 			buyDeviceButton.setVisible(false);
 		}
 		convertUSD.setVisible(false);
@@ -324,11 +336,11 @@ public class Game {
 		for(Upgrade i : upgradeList) {
 			i.image.setVisible(false);
 		}
-		if(player.getDevice().getTier()+1 > devices.size()) {
+		if(player.getDevice().getTier()+1 >= devices.size()) {
 			noMoreDevices.setVisible(false);
 			buyDeviceButton.setVisible(false);
 		} else {
-			devices.get(devices.indexOf(player.getDevice())+1).image.setVisible(false);
+			devices.get(devices.indexOf(player.getDevice())+1).image2.setVisible(false);
 			buyDeviceButton.setVisible(false);
 		}
 		convertUSD.setVisible(true);
@@ -345,11 +357,11 @@ public class Game {
 			}
 			btcIcon.setVisible(false);
 			usdIcon.setVisible(false);
-			if(player.getDevice().getTier()+1 > devices.size()) {
+			if(player.getDevice().getTier()+1 >= devices.size()) {
 				noMoreDevices.setVisible(false);
 				buyDeviceButton.setVisible(false);
 			} else {
-				devices.get(devices.indexOf(player.getDevice())+1).image.setVisible(false);
+				devices.get(devices.indexOf(player.getDevice())+1).image2.setVisible(false);
 				buyDeviceButton.setVisible(false);
 			}
 			convertUSD.setVisible(false);
@@ -362,11 +374,11 @@ public class Game {
 		}
 		btcIcon.setVisible(false);
 		usdIcon.setVisible(false);
-		if(player.getDevice().getTier()+1 > devices.size()) {
+		if(player.getDevice().getTier()+1 >= devices.size()) {
 			noMoreDevices.setVisible(true);
 			buyDeviceButton.setVisible(false);
 		} else {
-			devices.get(devices.indexOf(player.getDevice())+1).image.setVisible(true);
+			devices.get(devices.indexOf(player.getDevice())+1).image2.setVisible(true);
 			buyDeviceButton.setVisible(true);
 		}
 		convertUSD.setVisible(false);
@@ -650,6 +662,15 @@ public class Game {
 				backToMain();
 			} else if(action.equalsIgnoreCase("stat-back")) {
 				backToGame();
+			} else if(action.equalsIgnoreCase("reset")) {
+				if(JOptionPane.showConfirmDialog(frame,"Are you sure you want to reset your data?","Reset?",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					player.reset();
+					for(Upgrade i : upgradeList) {
+						i.resetPrices();
+						i.numOf = 0;
+					}
+					player.setDevice(devices.get(0));
+				}
 			}
 		}
 	}
@@ -753,14 +774,17 @@ public class Game {
 				}
 			} else if(action.equalsIgnoreCase("nextDevice")) {
 				if(devices.get(devices.indexOf(player.getDevice())+1).buy(player)) {
-					JOptionPane.showMessageDialog(gameMenu, "Success", "Purchase", JOptionPane.INFORMATION_MESSAGE);
 					devices.get(devices.indexOf(player.getDevice())-1).image.setVisible(false);
+					JOptionPane.showMessageDialog(gameMenu, "Success", "Purchase", JOptionPane.INFORMATION_MESSAGE);
+					devices.get(devices.indexOf(player.getDevice())).image2.setVisible(false);
+					devices.get(devices.indexOf(player.getDevice())).image.setVisible(true);
 					for(Upgrade i : upgradeList) {
 						i.resetPrices();
 					}
 					Player.chance = player.getDevice().getBaseChance();
 					Player.period = player.getDevice().getBasePeriod();
 					Player.value = player.getDevice().getBaseValue();
+					displayUpgradeMarket();
 				} else {
 					JOptionPane.showMessageDialog(gameMenu, "Insufficient Funds", "Error", JOptionPane.WARNING_MESSAGE);
 				}

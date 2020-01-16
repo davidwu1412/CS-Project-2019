@@ -80,4 +80,13 @@ public class Player {
 			totalBTC += Player.value;
 		}
 	}
+	public void reset() {
+		blackMarketUnlock = false;
+		chance = 20;
+		value = 0.01;
+		period = 10;
+		BTC = 0.5;
+		USD = 0;
+		totalBTC = 0.5;
+	}
 }
