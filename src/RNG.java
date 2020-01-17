@@ -23,18 +23,20 @@ public class RNG implements Runnable {
 		while(running) {
 			try {
 				timeCounter = System.currentTimeMillis()-timerStartTime;
+				Game.timerFrame = (int)Math.round(100.0*timeCounter/(Player.period*1000));
+				if(Game.timerFrame > 100) {
+					Game.timerFrame = 0;
+				}
 				if(timeCounter >= Player.period*1000) {
 					sem.acquire();
 					boolean temp = generateNumber(Player.chance);
 					if(temp) {
-						System.out.println("success");
-						
 						Game.player.giveBTC(temp);
 					}
 					sem.release();
 					timerStartTime = System.currentTimeMillis();
 				} else {
-					Thread.sleep(50);
+					Thread.sleep(5);
 				}
 			} catch(InterruptedException e) {
 				System.out.println("Error 6: RNG Thread unable to sleep");

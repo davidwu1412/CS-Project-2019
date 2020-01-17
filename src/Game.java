@@ -13,13 +13,13 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-//TODO: ADD BASE STATS TO DEVICES
-//TODO: Timer and associated sprites
+//TODO: Convert Everything to BigInteger
 //TODO: Attach sprites
 //TODO: Finish ui
 
 public class Game {
 
+	public static int timerFrame;
 	public final Dimension screenSize;
 	private ArrayList<Device> devices;
 	private Thread rngThread, statThread;
@@ -28,7 +28,7 @@ public class Game {
 	private Semaphore sem = new Semaphore(1);
 	public statTracker tracker = new statTracker(sem);
 	public RNG rng = new RNG(sem);
-	private JLabel title, instructions, credits, statTitleLabel, deviceLabel, chanceLabel, periodLabel, valueLabel, GPULabel, CPULabel, RAMLabel, btcIcon, usdIcon, btcLabel, usdLabel, noMoreDevices;
+	private JLabel blackMarketPrice, CPUPrice, GPUPrice, RAMPrice, title, instructions, credits, statTitleLabel, deviceLabel, chanceLabel, periodLabel, valueLabel, GPULabel, CPULabel, RAMLabel, btcIcon, usdIcon, btcLabel, usdLabel, noMoreDevices, timer, currentDeviceLabel, devicePrice;
 	private JButton backToMainButton, tutorialButton, tutorialBackButton, resetDataButton, statsButton, gameMenuButton, statBackButton, exitButton, convertUSD, convertBTC, upgradeMarketButton, currencyMarketButton, blackMarketButton, deviceMarketButton, buyDeviceButton;
 	public JFrame frame = new JFrame();
 	private JPanel mainMenu,gameMenu,tutorialPanel, statsPanel;
@@ -52,53 +52,53 @@ public class Game {
 		statsPanel.setSize(1000,700);
 
 		devices = new ArrayList<Device>();
-		devices.add(new Device("Arduino Nano", "It somehow works, it just does, don't question it.", "resources/Nano.png", 0, 0, 0, 0, 0));
-		devices.add(new Device("Arduino Uno", "Marginally better, at least it's larger.", "resources/Uno.png", 0, 1, 0, 0, 0));
-		devices.add(new Device("Casual Laptop", "Finally, something real although sketchy.", "resources/Casual.png", 0, 2, 0, 0, 0));
-		devices.add(new Device("Business Laptop", "Wow! Actually capable of getting some BTC.", "resources/Business.png", 0, 3, 0, 0, 0));
-		devices.add(new Device("Gaming Laptop", "A beast for it's size.", "resources/Gaming.png", 0, 4, 0, 0, 0));
-		devices.add(new Device("Mini Desktop", "Marginally better than a laptop.", "resources/Mini.png", 0, 5, 0, 0, 0));
-		devices.add(new Device("PC Desktop", "Wow! Can actually run Windows 10.", "resources/Pc.png", 0, 6, 0, 0, 0));
-		devices.add(new Device("Gaming Desktop", "Amazing top of the line performance.", "resources/GamingPC.png", 0, 7, 0, 0, 0));
-		devices.add(new Device("Mom's Basement", "First server finally.", "none", 0, 8, 0, 0, 0));
-		devices.add(new Device("Ubisoft Server", "Practically non-existent", "none", 0, 9, 0, 0, 0));
-		devices.add(new Device("Server Farm", "Finally, you've reached the end-game", "none", 0, 10, 0, 0, 0));
+		devices.add(new Device("Arduino Nano", "resources/Nano.png", 0, 0, 20, 10, 0.01));
+		devices.add(new Device("Arduino Uno", "resources/Uno.png", 600, 1, 25, 10, 0.10));
+		devices.add(new Device("Casual Laptop", "resources/Casual.png", 1000, 2, 30, 8, 0.30));
+		devices.add(new Device("Business Laptop", "resources/Business.png", 2001, 3, 35, 8, 0.50));
+		devices.add(new Device("Gaming Laptop", "resources/Gaming.png", 5000, 4, 40, 6, 1.00));
+		devices.add(new Device("Mini Desktop", "resources/Mini.png", 4000, 5, 45, 5, 1.50));
+		devices.add(new Device("PC Desktop", "resources/Pc.png", 6000, 6, 50, 4, 2.00));
+		devices.add(new Device("Gaming Desktop", "resources/GamingPC.png", 9999, 7, 55, 3, 2.20));
+		devices.add(new Device("Mom's Basement", "resources/Basement.png", 100000, 8, 60, 2, 2.6));
+		devices.add(new Device("Ubisoft Server", "resources/Ubisoft.png", 500000, 9, 65, 2, 3.33));
+		devices.add(new Device("Server Farm", "resources/ServerFarm.png", 9999999, 10, 70, 1, 4.20));
 		Collections.sort(devices, new deviceByTier());
 		Upgrade.setDefaultPrices();
 		player = new Player();
 		screenSize = new Dimension(1000,700);
 
-		tutorialButton = new JButton("How To Play");				//Done
+		tutorialButton = new JButton("How To Play");
 		tutorialButton.setBackground(Color.gray);
 		tutorialButton.setBounds(425,400,150,50);
 		tutorialButton.setActionCommand("tutorial");
 		tutorialButton.addActionListener(new ButtonActions());
 
-		backToMainButton = new JButton("Back");						//Done
+		backToMainButton = new JButton("Back");
 		backToMainButton.setBackground (Color.gray);
 		backToMainButton.setBounds(50,570,100,50);
 		backToMainButton.setActionCommand("backToMain");
 		backToMainButton.addActionListener(new ButtonActions());
 
-		statsButton = new JButton("Player Stats");					//Done
+		statsButton = new JButton("Player Stats");
 		statsButton.setBackground (Color.gray);
 		statsButton.setBounds(175,570,150,50);
 		statsButton.setActionCommand("displayStats");
 		statsButton.addActionListener(new ButtonActions());
 
-		gameMenuButton = new JButton("Play");						//Done
+		gameMenuButton = new JButton("Play");
 		gameMenuButton.setBackground (Color.gray);
 		gameMenuButton.setBounds(425,300,150,50);
 		gameMenuButton.setActionCommand("playGame");
 		gameMenuButton.addActionListener(new ButtonActions());
 
-		statBackButton = new JButton("Back");						//Done
+		statBackButton = new JButton("Back");
 		statBackButton.setBackground (Color.gray);
 		statBackButton.setBounds(250,50,200,50);
 		statBackButton.setActionCommand("stat-back");
 		statBackButton.addActionListener(new ButtonActions());
 
-		tutorialBackButton = new JButton("Back");					//Done
+		tutorialBackButton = new JButton("Back");
 		tutorialBackButton.setBackground (Color.gray);
 		tutorialBackButton.setBounds(50,570,100,50);
 		tutorialBackButton.setActionCommand("toMain");
@@ -110,23 +110,22 @@ public class Game {
 		resetDataButton.setActionCommand("reset");
 		resetDataButton.addActionListener(new ButtonActions());
 		
-
-		exitButton = new JButton("Exit");							//Done
+		exitButton = new JButton("Exit");
 		exitButton.setBackground (Color.gray);
 		exitButton.setBounds(775,550,150,50);
 		exitButton.setActionCommand("quit");
 		exitButton.addActionListener(new ButtonActions());
 
-		convertUSD = new JButton("Convert USD to BTC");				//
+		convertUSD = new JButton("Convert USD to BTC");
 		convertUSD.setBackground(Color.gray);
-		convertUSD.setBounds(500,300,100,50);
+		convertUSD.setBounds(650,250,200,50);
 		convertUSD.setActionCommand("usdToBTC");
 		convertUSD.addActionListener(new MarketButtons());
 		convertUSD.setVisible(false);
 
-		convertBTC = new JButton("Convert BTC to USD");				//
+		convertBTC = new JButton("Convert BTC to USD");
 		convertBTC.setBackground(Color.gray);
-		convertBTC.setBounds(500,400,100,50);
+		convertBTC.setBounds(650,400,200,50);
 		convertBTC.setActionCommand("btcToUSD");
 		convertBTC.addActionListener(new MarketButtons());
 		convertBTC.setVisible(false);
@@ -157,17 +156,17 @@ public class Game {
 
 		buyDeviceButton = new JButton("Buy Next Device");
 		buyDeviceButton.setBackground(Color.gray);
-		buyDeviceButton.setBounds(550,300,100,50);
+		buyDeviceButton.setBounds(650,500,200,50);
 		buyDeviceButton.setActionCommand("nextDevice");
 		buyDeviceButton.addActionListener(new MarketButtons());
 		buyDeviceButton.setVisible(false);
 
 		btcIcon = new JLabel(new ImageIcon("resources/BTC.png"));
-		btcIcon.setBounds(500,300,75,75);
+		btcIcon.setBounds(710,320,75,75);
 		btcIcon.setVisible(false);
 
 		usdIcon = new JLabel(new ImageIcon("resources/USD.png"));
-		usdIcon.setBounds(500,400,75,75);
+		usdIcon.setBounds(710,170,75,75);
 		usdIcon.setVisible(false);
 
 		btcLabel = new JLabel("");
@@ -177,6 +176,34 @@ public class Game {
 		usdLabel = new JLabel("");
 		usdLabel.setBounds(250,50,200,50);
 		usdLabel.setBackground(Color.lightGray);
+
+		currentDeviceLabel = new JLabel("");
+		currentDeviceLabel.setBounds(400,50,300,50);
+
+		devicePrice = new JLabel("", SwingConstants.CENTER);
+		devicePrice.setBounds(650,440,200,50);
+		devicePrice.setFont(new Font("Serif", Font.PLAIN, 16));
+		devicePrice.setVisible(false);
+
+		CPUPrice = new JLabel(String.format("Price: $"), SwingConstants.LEFT);
+		CPUPrice.setBounds(650,200,200,50);
+		CPUPrice.setFont(new Font("Serif", Font.PLAIN, 16));
+		CPUPrice.setVisible(false);
+
+		GPUPrice = new JLabel(String.format("Price: $"), SwingConstants.LEFT);
+		GPUPrice.setBounds(650,400,200,50);
+		GPUPrice.setFont(new Font("Serif", Font.PLAIN, 16));
+		GPUPrice.setVisible(false);
+
+		RAMPrice = new JLabel(String.format("Price: $"), SwingConstants.LEFT);
+		RAMPrice.setBounds(650,300,200,50);
+		RAMPrice.setFont(new Font("Serif", Font.PLAIN, 16));
+		RAMPrice.setVisible(false);
+
+		blackMarketPrice = new JLabel("", SwingConstants.LEFT);
+		blackMarketPrice.setBounds(650,200,200,50);
+		blackMarketPrice.setFont(new Font("Serif", Font.PLAIN, 16));
+		blackMarketPrice.setVisible(false);
 
 		title = new JLabel("Bitcoin Tycoon", SwingConstants.CENTER);
 		title.setBounds(0,75,1000,200);
@@ -195,37 +222,40 @@ public class Game {
 		credits.setBounds(500,500,100,100);
 		credits.setFont(new Font("Serif", Font.PLAIN, 14));
 
-		statTitleLabel = new JLabel("Stats:", SwingConstants.LEFT);				//Done
+		statTitleLabel = new JLabel("Stats:", SwingConstants.LEFT);
 		statTitleLabel.setBounds(100,100,500,25);
 		statTitleLabel.setFont(new Font("Serif", Font.BOLD, 14));
 
-		deviceLabel = new JLabel();												//Done
+		deviceLabel = new JLabel();
 		deviceLabel.setBounds(100,200,500,25);
 		deviceLabel.setFont(new Font("Serif", Font.BOLD, 14));
 		
-		chanceLabel = new JLabel();												//Done
+		chanceLabel = new JLabel();
 		chanceLabel.setBounds(100,225,500,25);
 		deviceLabel.setFont(new Font("Serif", Font.BOLD, 14));
 		
-		valueLabel = new JLabel();												//Done
+		valueLabel = new JLabel();
 		valueLabel.setBounds(100,250,500,25);
 		valueLabel.setFont(new Font("Serif", Font.BOLD, 14));
 
-		periodLabel = new JLabel();												//Done
+		periodLabel = new JLabel();
 		periodLabel.setBounds(100,275,500,25);
 		periodLabel.setFont(new Font("Serif", Font.BOLD, 14));
 
 		CPULabel = new JLabel(String.format("CPU Upgrades: "), SwingConstants.LEFT);
-		CPULabel.setBounds(100,325,100,25);
+		CPULabel.setBounds(100,325,600,25);
 		CPULabel.setFont(new Font("Serif", Font.BOLD, 14));
 
 		GPULabel = new JLabel(String.format("GPU Upgrades:"), SwingConstants.LEFT);
-		GPULabel.setBounds(100,350,100,25);
+		GPULabel.setBounds(100,350,600,25);
 		GPULabel.setFont(new Font("Serif", Font.BOLD, 14));
 		
 		RAMLabel = new JLabel(String.format("RAM Upgrades:"), SwingConstants.LEFT); 
-		RAMLabel.setBounds(100,375,100,25);
+		RAMLabel.setBounds(100,375,600,25);
 		RAMLabel.setFont(new Font("Serif", Font.BOLD, 14));
+
+		timer = new JLabel();
+		timer.setBounds(150,440,112,112);
 		
 		mainMenu.add(title);
 		mainMenu.add(gameMenuButton);
@@ -240,6 +270,7 @@ public class Game {
 			gameMenu.add(i.image);
 			gameMenu.add(i.image2);
 		}
+		gameMenu.add(currentDeviceLabel);
 		gameMenu.add(statsButton);
 		gameMenu.add(convertUSD);
 		gameMenu.add(convertBTC);
@@ -253,6 +284,12 @@ public class Game {
 		gameMenu.add(usdLabel);
 		gameMenu.add(noMoreDevices);
 		gameMenu.add(buyDeviceButton);
+		gameMenu.add(timer);
+		gameMenu.add(blackMarketPrice);
+		gameMenu.add(CPUPrice);
+		gameMenu.add(GPUPrice);
+		gameMenu.add(RAMPrice);
+		gameMenu.add(devicePrice);
 
 		tutorialPanel.add(instructions);
 		tutorialPanel.add(tutorialBackButton);
@@ -314,6 +351,15 @@ public class Game {
 		for(Upgrade i : upgradeList) {
 			if(!i.blackMarketItem && player.getDevice().availableUpgrades.contains(i)) {
 				i.image.setVisible(true);
+				if(i.type.equalsIgnoreCase("ProcessorUpgrade")) {
+					CPUPrice.setVisible(true);
+				} else if(i.type.equalsIgnoreCase("GraphicsUpgrade")) {
+					GPUPrice.setVisible(true);
+				} else if(i.type.equalsIgnoreCase("RAMUpgrade")) {
+					RAMPrice.setVisible(true);
+				} else if(i.type.equalsIgnoreCase("BlackMarket")) {
+					blackMarketPrice.setVisible(false);
+				}
 			} else {
 				i.image.setVisible(false);
 			}
@@ -329,10 +375,13 @@ public class Game {
 		}
 		convertUSD.setVisible(false);
 		convertBTC.setVisible(false);
+		devicePrice.setVisible(false);
 	}
 	public void displayCurrencyMarket() {
 		btcIcon.setVisible(true);
 		usdIcon.setVisible(true);
+		convertUSD.setVisible(true);
+		convertBTC.setVisible(true);
 		for(Upgrade i : upgradeList) {
 			i.image.setVisible(false);
 		}
@@ -343,8 +392,11 @@ public class Game {
 			devices.get(devices.indexOf(player.getDevice())+1).image2.setVisible(false);
 			buyDeviceButton.setVisible(false);
 		}
-		convertUSD.setVisible(true);
-		convertBTC.setVisible(true);
+		CPUPrice.setVisible(false);
+		GPUPrice.setVisible(false);
+		RAMPrice.setVisible(false);
+		blackMarketPrice.setVisible(false);
+		devicePrice.setVisible(false);
 	}
 	public void displayBlackMarket() {
 		if(player.blackMarketStatus()) {
@@ -366,6 +418,11 @@ public class Game {
 			}
 			convertUSD.setVisible(false);
 			convertBTC.setVisible(false);
+			CPUPrice.setVisible(false);
+			GPUPrice.setVisible(false);
+			RAMPrice.setVisible(false);
+			blackMarketPrice.setVisible(false);
+			devicePrice.setVisible(false);
 		}
 	}
 	public void displayDeviceMarket() {
@@ -375,14 +432,21 @@ public class Game {
 		btcIcon.setVisible(false);
 		usdIcon.setVisible(false);
 		if(player.getDevice().getTier()+1 >= devices.size()) {
+			devicePrice.setText("");
 			noMoreDevices.setVisible(true);
 			buyDeviceButton.setVisible(false);
 		} else {
+			devicePrice.setText(String.format("Price: $%.2f USD", devices.get(devices.indexOf(player.getDevice())+1).price));
 			devices.get(devices.indexOf(player.getDevice())+1).image2.setVisible(true);
 			buyDeviceButton.setVisible(true);
 		}
+		devicePrice.setVisible(true);
 		convertUSD.setVisible(false);
 		convertBTC.setVisible(false);
+		CPUPrice.setVisible(false);
+		GPUPrice.setVisible(false);
+		RAMPrice.setVisible(false);
+		blackMarketPrice.setVisible(false);
 	}
 	public void displayMainMenu() {
 		mainMenu.setVisible(true);
@@ -474,7 +538,7 @@ public class Game {
 					effect[1] = "multiply";
 					effect[2] = "5";
 					u = new Upgrade("CPU Upgrade", "ProcessorUpgrade", Upgrade.USD, false, effect, new StringTokenizer(splitter.nextToken(),","));
-					u.image.setBounds(300,300,75,75);
+					u.image.setBounds(550,200,75,75);
 					u.image.setActionCommand("buyUpgrade-CPU");
 					u.image.addActionListener(new MarketButtons());
 					upgradeList.add(u);
@@ -483,7 +547,7 @@ public class Game {
 					effect[1] = "multiply";
 					effect[2] = "3";
 					u = new Upgrade("Graphics Card Upgrade", "GraphicsUpgrade", Upgrade.USD, false, effect, new StringTokenizer(splitter.nextToken(),","));
-					u.image.setBounds(300,400,75,75);
+					u.image.setBounds(550,400,75,75);
 					u.image.setActionCommand("buyUpgrade-GPU");
 					u.image.addActionListener(new MarketButtons());
 					upgradeList.add(u);
@@ -492,13 +556,13 @@ public class Game {
 					effect[1] = "multiply";
 					effect[2] = "2";
 					u = new Upgrade("Memory Upgrade", "RAMUpgrade", Upgrade.USD, false, effect, new StringTokenizer(splitter.nextToken(),","));
-					u.image.setBounds(300,300,75,75);
+					u.image.setBounds(550,300,75,75);
 					u.image.setActionCommand("buyUpgrade-RAM");
 					u.image.addActionListener(new MarketButtons());
 					upgradeList.add(u);
 				} else if(temp.equalsIgnoreCase("BlackMarket")) {
 					u = new BlackMarketItem("Black Market Item", effect, new StringTokenizer(splitter.nextToken(),","));
-					u.image.setBounds(300,300,75,75);
+					u.image.setBounds(550,300,75,75);
 					u.image.setActionCommand("buyUpgrade-BlackMarket");
 					u.image.addActionListener(new MarketButtons());
 					upgradeList.add(u);
@@ -750,7 +814,6 @@ public class Game {
 					}
 				}
 			} else if(action.equalsIgnoreCase("buyUpgrade-RAM")) {
-				System.out.println("reached");
 				for(Upgrade i : upgradeList) {
 					if(i.type.equalsIgnoreCase("RAMUpgrade")) {
 						if(i.buy(player)) {
@@ -774,8 +837,8 @@ public class Game {
 				}
 			} else if(action.equalsIgnoreCase("nextDevice")) {
 				if(devices.get(devices.indexOf(player.getDevice())+1).buy(player)) {
-					devices.get(devices.indexOf(player.getDevice())-1).image.setVisible(false);
 					JOptionPane.showMessageDialog(gameMenu, "Success", "Purchase", JOptionPane.INFORMATION_MESSAGE);
+					devices.get(devices.indexOf(player.getDevice())-1).image.setVisible(false);
 					devices.get(devices.indexOf(player.getDevice())).image2.setVisible(false);
 					devices.get(devices.indexOf(player.getDevice())).image.setVisible(true);
 					for(Upgrade i : upgradeList) {
@@ -821,6 +884,22 @@ public class Game {
 						blackMarketButton.setText("Black Market");
 					}
 					prevStatus = player.blackMarketStatus();
+					currentDeviceLabel.setText("Current Device: " + player.getDevice().name);
+					timer.setIcon(new ImageIcon("resources/timer" + timerFrame + ".png"));
+					for(Upgrade i : upgradeList) {
+						if(i.type.equalsIgnoreCase("ProcessorUpgrade")) {
+							CPUPrice.setText(String.format("Price: $%.2f USD", i.price));
+							CPULabel.setText(String.format("CPU Upgrades: %d", i.numOf));
+						} else if(i.type.equalsIgnoreCase("GraphicsUpgrade")) {
+							GPUPrice.setText(String.format("Price: $%.2f USD", i.price));
+							GPULabel.setText(String.format("GPU Upgrades: %d", i.numOf));
+						} else if(i.type.equalsIgnoreCase("RAMUpgrade")) {
+							RAMPrice.setText(String.format("Price: $%.2f USD", i.price));
+							RAMLabel.setText(String.format("RAM Upgrades: %d", i.numOf));
+						} else if(i.type.equalsIgnoreCase("BlackMarket")) {
+							blackMarketPrice.setText(String.format("Price: %f BTC", i.price));
+						}
+					}
 					sem.release();
 					delta--;
 				}

@@ -32,9 +32,6 @@ public class BlackMarketItem extends Upgrade {
 		} while(true);
 		output[4] = "divide";
 		output[5] = Double.toString((r.nextDouble()*10)+10);
-		for(String i : output) {
-			System.out.println(i);
-		}
 		return output;
 	}
 	public void setQuality(int newQuality) {

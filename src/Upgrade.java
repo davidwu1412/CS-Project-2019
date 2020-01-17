@@ -84,9 +84,9 @@ public class Upgrade {
 		this.type = type;
 	}
 	public static void setDefaultPrices() {
-		defaultPrices.put("ProcessorUpgrade", 100);
-		defaultPrices.put("GraphicsUpgrade", 200);
-		defaultPrices.put("RAMUpgrade", 50);
+		defaultPrices.put("ProcessorUpgrade", 10);
+		defaultPrices.put("GraphicsUpgrade", 20);
+		defaultPrices.put("RAMUpgrade", 25);
 		defaultPrices.put("BlackMarket", 5);
 	}
 	public void resetPrices() {

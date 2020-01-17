@@ -9,22 +9,20 @@ public class Device {
 	protected LinkedList<Upgrade> currentUpgrades;
 	protected JLabel image;
 	protected JLabel image2;
-	protected String flavourText = "";
 	protected double priceWeighting;
-	protected int price;
+	protected double price;
 	private double baseChance;
 	private double basePeriod;
 	private double baseValue;
 	private int tier;
-	public Device(String name, String flavourText, String image, int price, int tier, double chance, double period, double value) {
+	public Device(String name, String image, double price, int tier, double chance, double period, double value) {
 		this.image = new JLabel(new ImageIcon(image));
 		this.image2 = new JLabel(new ImageIcon(image));
-		this.image.setBounds(50,50,300,300);
-		this.image2.setBounds(400,50,300,300);
+		this.image.setBounds(50,150,300,300);
+		this.image2.setBounds(600,150,300,300);
 		this.name = name;
 		availableUpgrades = new ArrayList<Upgrade>();
 		currentUpgrades = new LinkedList<Upgrade>();
-		this.flavourText = flavourText;
 		priceWeighting = 1;
 		this.price = price;
 		this.tier = tier;
