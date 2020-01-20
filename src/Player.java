@@ -1,23 +1,28 @@
+// Shawn Hu and David Wu
+// Jan 17th, 2020
+// This is the class for Player and related methods. It contains the player information, game save information. 
 
 public class Player {
-	public static double chance = 20;
+	public static double chance = 20; // these are the stats of the player, the values here are default values.
 	public static double period = 10;
 	public static double value = 0.01;
-	public static boolean giveBTC = false;
+	public static boolean giveBTC = false; // a boolean to check if the player successfully mined Bitcoin or not
 	public static double conversionRate = 1026.35;
 	public static double totalBTC = 0;
-	private Device currentDevice;
+	private Device currentDevice; //Which device the player has and how much money the player has. 
 	private double USD = 0;
 	private double BTC = 0;
-	private boolean blackMarketUnlock = false;
+	private boolean blackMarketUnlock = false; // a boolean to see if the player has unlocked the black market or not.
 	public Player() {
 	}
+	// getter/setter methods
 	public void setDevice(Device d) {
 		currentDevice = d;
 	}
 	public Device getDevice() {
 		return currentDevice;
 	}
+	// these methods just add or set the money values. 
 	public void addUSD(double USD) {
 		this.USD += USD;
 	}
@@ -50,6 +55,7 @@ public class Player {
 			this.USD += money;
 		}
 	}
+	// sets the black market unlock flag
 	public void unlockBlackMarket() {
 		blackMarketUnlock = true;
 	}
@@ -59,6 +65,7 @@ public class Player {
 	public boolean blackMarketStatus() {
 		return blackMarketUnlock;
 	}
+	// This method makes sure the stats don't go past limits. 
 	public void regulateValues() {
 		if(chance < 5) {
 			chance = 5;
@@ -74,12 +81,14 @@ public class Player {
 			value = 0.0001;
 		}
 	}
+	// This methods adjusts the money values. 
 	public void giveBTC(boolean input) {
 		if(input) {
 			this.BTC += Player.value;
 			totalBTC += Player.value;
 		}
 	}
+	// This method resets the player data. 
 	public void reset() {
 		blackMarketUnlock = false;
 		chance = 20;
