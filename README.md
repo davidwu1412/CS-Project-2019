@@ -1,6 +1,6 @@
-# cs-final-project
+# cs-final-project (David's Copy)
 
-Credit to Shawn Hu - Markville Secondary School (project partner)
+Credit to Shawn Hu - Markville Secondary School (project partner) 
 
 Ms. Wong CS Grade 12
 
