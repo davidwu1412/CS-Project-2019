@@ -1,6 +1,6 @@
 # cs-final-project
 
-Credit to David Wu - Markville Secondary School (project partner)
+Credit to Shawn Hu - Markville Secondary School (project partner)
 
 Ms. Wong CS Grade 12
 
@@ -13,3 +13,4 @@ A full java programmed game for the MSS computer science course final project.
 Graphics fully done in java using java functions.
 
 Everything is just logic programming and OOP.
+
